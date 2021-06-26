@@ -7,11 +7,6 @@ import {
   Param,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiClientService } from 'src/api-client/api-client.service';
-import {
-  CharacterDataWrapper,
-  CharacterResponse,
-} from './characters.interface';
 import { CharactersService } from './characters.service';
 
 const ONE_DAY_IN_SECONDS = 86400;
@@ -21,9 +16,10 @@ export class CharactersController {
   constructor(private readonly charactersService: CharactersService) {}
 
   @Get()
+  @CacheTTL(ONE_DAY_IN_SECONDS)
+  @UseInterceptors(CacheInterceptor)
   async getCharacters() {
-    const characterIds = [];
-    return characterIds;
+    return this.charactersService.getCharacters();
   }
 
   @Get(':characterId')

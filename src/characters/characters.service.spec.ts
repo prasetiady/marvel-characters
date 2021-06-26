@@ -1,4 +1,4 @@
-import { ApiClientService } from 'src/api-client/api-client.service';
+import { ApiClientService } from '../api-client/api-client.service';
 import { CharactersService } from './characters.service';
 
 describe('CharactersService', () => {
