@@ -1,18 +1,18 @@
-import { CacheModule, HttpModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ApiClientService } from './api-client.service';
-import { CharactersController } from './characters.controller';
+import { CharactersModule } from './characters/characters.module';
+import { ApiClientModule } from './api-client/api-client.module';
 import configuration from './config/configuration';
 
 @Module({
   imports: [
-    CacheModule.register(),
     ConfigModule.forRoot({ load: [configuration], isGlobal: true }),
-    HttpModule,
+    CharactersModule,
+    ApiClientModule,
   ],
-  controllers: [AppController, CharactersController],
-  providers: [AppService, ApiClientService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

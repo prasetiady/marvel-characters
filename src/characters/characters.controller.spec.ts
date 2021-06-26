@@ -1,15 +1,11 @@
 import { BadRequestException } from '@nestjs/common';
-import { ApiClientService } from './api-client.service';
 import { CharactersController } from './characters.controller';
-import {
-  Character,
-  CharacterDataWrapper,
-  CharacterResponse,
-} from './characters.interface';
+import { Character, CharacterResponse } from './characters.interface';
+import { CharactersService } from './characters.service';
 
 describe('CharactersController', () => {
-  const apiClientService = ApiClientService.prototype;
-  const controller = new CharactersController(apiClientService);
+  const characterService = CharactersService.prototype;
+  const controller = new CharactersController(characterService);
 
   const character: Character = {
     id: 1009407,
@@ -17,14 +13,16 @@ describe('CharactersController', () => {
     description: '',
   };
 
-  const characterData: CharacterDataWrapper = {
-    data: { results: [character] },
+  const characterResponse: CharacterResponse = {
+    id: character.id,
+    name: character.name,
+    description: character.description,
   };
 
   beforeEach(async () => {
     jest
-      .spyOn(apiClientService, 'get')
-      .mockReturnValue(Promise.resolve(characterData));
+      .spyOn(characterService, 'getCharacter')
+      .mockReturnValue(Promise.resolve(characterResponse));
   });
 
   it('should be defined', () => {
@@ -37,12 +35,7 @@ describe('CharactersController', () => {
   });
 
   it('should return CharacterResponse', async () => {
-    const expectedResult: CharacterResponse = {
-      id: character.id,
-      name: character.name,
-      description: character.description,
-    };
     const result = await controller.getCharacter({ characterId: character.id });
-    expect(result).toEqual(expectedResult);
+    expect(result).toEqual(characterResponse);
   });
 });
