@@ -40,7 +40,6 @@ export class CharactersService {
         result.push(characterId);
       });
     }
-    console.log(result.length);
     return result;
   }
 
