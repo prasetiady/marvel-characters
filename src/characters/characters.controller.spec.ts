@@ -31,11 +31,13 @@ describe('CharactersController', () => {
 
   it('should throw exception when characterId missing', async () => {
     const expectedError = new BadRequestException('missing characterId');
-    await expect(controller.getCharacter({})).rejects.toThrow(expectedError);
+    await expect(controller.getCharacter(undefined)).rejects.toThrow(
+      expectedError,
+    );
   });
 
   it('should return CharacterResponse', async () => {
-    const result = await controller.getCharacter({ characterId: character.id });
+    const result = await controller.getCharacter(character.id);
     expect(result).toEqual(characterResponse);
   });
 });
