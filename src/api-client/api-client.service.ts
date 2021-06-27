@@ -1,4 +1,10 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpService,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHash } from 'crypto';
 
@@ -25,7 +31,19 @@ export class ApiClientService {
     params.apikey = publicKey;
     params.hash = hash;
     const url = `${this.host}${path}`;
-    const response = await this.httpService.get<R>(url, { params }).toPromise();
-    return response.data;
+    return this.httpService
+      .get<R>(url, { params })
+      .toPromise()
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        const response = error.response;
+        if (response && response.data) {
+          throw new HttpException(response.data.status, response.data.code);
+        } else {
+          throw new InternalServerErrorException();
+        }
+      });
   }
 }

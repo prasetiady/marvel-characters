@@ -20,7 +20,7 @@ $ cp .env.example .env
 $ npm run start
 ```
 
-Server can be accessed on http://localhost:8080
+Swagger UI can be accessed on http://localhost:8080
 
 ## Test
 
