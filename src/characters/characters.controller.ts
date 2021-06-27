@@ -7,6 +7,7 @@ import {
   Param,
   UseInterceptors,
 } from '@nestjs/common';
+import { CharacterResponse } from './characters.interface';
 import { CharactersService } from './characters.service';
 
 const ONE_DAY_IN_SECONDS = 86400;
@@ -18,17 +19,19 @@ export class CharactersController {
   @Get()
   @CacheTTL(ONE_DAY_IN_SECONDS)
   @UseInterceptors(CacheInterceptor)
-  async getCharacters() {
+  async getCharacters(): Promise<number[]> {
     return this.charactersService.getCharacters();
   }
 
   @Get(':characterId')
   @CacheTTL(ONE_DAY_IN_SECONDS)
   @UseInterceptors(CacheInterceptor)
-  async getCharacter(@Param() params) {
-    if (!params.characterId) {
+  async getCharacter(
+    @Param('characterId') characterId: number,
+  ): Promise<CharacterResponse> {
+    if (!characterId) {
       throw new BadRequestException('missing characterId');
     }
-    return this.charactersService.getCharacter(params.characterId);
+    return this.charactersService.getCharacter(characterId);
   }
 }
