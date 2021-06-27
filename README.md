@@ -4,8 +4,6 @@ Data provided by Marvel. © 2021 [Marvel](https://marvel.com)
 
 ## Installation
 
-1. install dependencies
-
 ```bash
 # install dependencies
 $ npm install
